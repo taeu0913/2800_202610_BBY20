@@ -1,5 +1,27 @@
 {
   "dependencies": {
-    "express": "^5.2.1"
-  }
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.2.0"
+  },
+  "name": "2800_202610_bby20",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taeu0913/2800_202610_BBY20.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/taeu0913/2800_202610_BBY20/issues"
+  },
+  "homepage": "https://github.com/taeu0913/2800_202610_BBY20#readme"
 }
