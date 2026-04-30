@@ -8,3 +8,7 @@ Team Members:
 - Person 5 Harman Kaur
 ## More details to come
 Our team BBY20 is designing a web app that aids regular everyday people in finding shade during hot days using a simple and interactive map whilst providing an optional opt-in feature that provides useful data for planners and designers.
+
+To run the website:
+1. download the files.
+2. open index.html in your browser.
