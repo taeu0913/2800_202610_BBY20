@@ -7,4 +7,4 @@ Team Members:
 - Person 4 Kelly Ryan Bayingana
 - Person 5 Harman Kaur
 ## More details to come
-TBA
+Our team BBY20 is designing a web app that aids regular everyday people in finding shade during hot days using a simple and interactive map whilst providing an optional opt-in feature that provides useful data for planners and designers.
