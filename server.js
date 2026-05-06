@@ -2,10 +2,12 @@ const express = require("express");
 const path = require("path");
 require("dotenv").config();
 
-const { connectDB } = require("./config/db");
+// const { connectDB } = require("./config/db");
 
 const app = express();
 const PORT = 3000;
+
+app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -13,23 +15,31 @@ app.use(express.static(path.join(__dirname, "public")));
 let db;
 
 // Start server ONLY after DB is ready
-async function startServer() {
-  try {
-    db = await connectDB();
+// async function startServer() {
+//   try {
+//     db = await connectDB();
 
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  } catch (err) {
-    console.error("Failed to start server:", err);
-    process.exit(1);
-  }
-}
+//     app.listen(PORT, () => {
+//       console.log(`Server running on http://localhost:${PORT}`);
+//     });
+//   } catch (err) {
+//     console.error("Failed to start server:", err);
+//     process.exit(1);
+//   }
+// }
 
-startServer();
+// startServer();
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "html", "index.html"));
+  res.render('pages/index');
+});
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
 
 console.log("server.js loaded");
