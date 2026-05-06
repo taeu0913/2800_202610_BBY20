@@ -35,7 +35,8 @@ app.get("/", (req, res) => {
 });
 
 app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
+  res.status(404);
+  res.render('pages/404');
 });
 
 app.listen(PORT, () => {
