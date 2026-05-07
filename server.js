@@ -59,7 +59,7 @@ app.get("/main", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render('pages/main', { layout: 'pages/login'} );
+  res.render('pages/login', { layout: 'templates/auth-layout'} );
 });
 
 app.use((req, res) => {
