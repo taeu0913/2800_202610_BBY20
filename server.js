@@ -58,6 +58,10 @@ app.get("/main", (req, res) => {
   res.render('pages/main', { layout: 'templates/skeleton'} );
 });
 
+app.get("/login", (req, res) => {
+  res.render('pages/main', { layout: 'pages/login'} );
+});
+
 app.use((req, res) => {
   res.status(404);
   res.render('pages/404');
