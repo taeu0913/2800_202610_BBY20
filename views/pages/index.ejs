@@ -1,31 +1,34 @@
-<%- include('../templates/header') %>
+<% if (firstTimeUser) { %>
+  <div class="alert alert-info alert-dismissible fade show" role="alert">
+    Welcome to ShadeFinder! Start by clicking Login or Signup.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+<% } %>
 
-  <% if (firstTimeUser) { %>
-    <div class="alert alert-info alert-dismissible fade show" role="alert">
-      Welcome to ShadeFinder! Start by clicking Login or Signup.
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-  <% } %>
-  <div class="b-example-divider"></div>
+<div class="text-center border-bottom py-5">
 
-  <div class="px-4 pt-5 my-5 text-center border-bottom">
-    <h1 class="display-4 fw-bold">ShadeFinder</h1>
-    <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">Stay cool, explore shaded spaces, and navigate hot days with confidence.</p>
-      <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-        <button type="button" class="btn btn-primary btn-lg px-4 me-sm-3" data-bs-toggle="tooltip" data-bs-placement="top" title="Login to your account">
-          Login
-        </button>
-        <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="tooltip" data-bs-placement="top" title="Create a new account">
-          Signup
-        </button>
-      </div>
-    </div>
-    <div class="overflow-hidden" style="max-height: 30vh;">
-      <div class="container px-5">
-        <img src="/images/landing.jpg" class="img-fluid border rounded-3 shadow-lg mb-4" alt="Example image" width="700" height="500" loading="lazy">
-      </div>
-    </div>
+  <h1 class="display-4 fw-bold">ShadeFinder</h1>
+
+  <p class="lead mt-3">
+    Stay cool, explore shaded spaces, and navigate hot days with confidence.
+  </p>
+
+  <div class="mt-4">
+    <button class="btn btn-primary btn-lg me-2"
+      data-bs-toggle="tooltip" title="Login to your account">
+      Login
+    </button>
+
+    <button class="btn btn-outline-secondary btn-lg"
+      data-bs-toggle="tooltip" title="Create a new account">
+      Signup
+    </button>
   </div>
 
-<%- include('../templates/footer') %>
+  <div class="mt-5">
+    <img src="/images/landing.jpg"
+      class="img-fluid rounded shadow"
+      alt="ShadeFinder preview">
+  </div>
+
+</div>

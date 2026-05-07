@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 require("dotenv").config();
 
@@ -15,6 +16,8 @@ app.use(session({
 }));
 
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', 'templates/skeleton');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
@@ -48,7 +51,11 @@ let db;
 // startServer();
 
 app.get("/", (req, res) => {
-  res.render('pages/index');
+  res.render('pages/index', { layout: 'templates/auth-layout'} );
+});
+
+app.get("/main", (req, res) => {
+  res.render('pages/main', { layout: 'templates/skeleton'} );
 });
 
 app.use((req, res) => {
