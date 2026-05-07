@@ -1,5 +1,11 @@
 <%- include('../templates/header') %>
 
+  <% if (firstTimeUser) { %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      Welcome to ShadeFinder! Start by clicking Login or Signup.
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
   <div class="b-example-divider"></div>
 
   <div class="px-4 pt-5 my-5 text-center border-bottom">

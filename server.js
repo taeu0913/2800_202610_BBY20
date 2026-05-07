@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const path = require("path");
 require("dotenv").config();
 
@@ -7,10 +8,26 @@ require("dotenv").config();
 const app = express();
 const PORT = 3000;
 
+app.use(session({
+  secret: "9899e993-96a0-4fc9-811a-c884e08efdfd",
+  resave: false,
+  saveUninitialized: true
+}));
+
 app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  if (!req.session.hasVisited) {
+    res.locals.firstTimeUser = true;
+    req.session.hasVisited = true;
+  } else {
+    res.locals.firstTimeUser = false;
+  }
+  next();
+});
 
 let db;
 
