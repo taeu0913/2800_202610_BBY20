@@ -1,8 +1,12 @@
 {
   "dependencies": {
     "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
     "express": "^5.2.1",
-    "mongodb": "^7.2.0"
+    "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.19.0",
+    "mongodb": "^7.2.0",
+    "nodemon": "^3.1.14"
   },
   "name": "2800_202610_bby20",
   "version": "1.0.0",
