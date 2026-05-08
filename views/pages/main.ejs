@@ -146,16 +146,31 @@
 
 </div>
 
-<!-- Page title (can remove later) -->
-<div class="text-center mb-2">
-  <h1 class="h4 fw-bold">Shade Map</h1>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
+  </script>
+
+<!-- FIRST-TIME USER CALLOUT -->
+<div id="welcomeCallout" class="alert alert-info alert-dismissible fade show shadow-sm m-3" role="alert">
+  <h4 class="alert-heading">Welcome to ShadeFinder!</h4>
+
+  <p>
+    Use the map to discover shaded areas nearby during hot days.
+    Click the map, explore shaded spots, or use your location to get started.
+  </p>
+
+  <hr>
+
+  <p class="mb-0">
+    You can also optionally contribute anonymous data to help planners design cooler urban spaces.
+  </p>
+
+  <button type="button" class="btn btn-dark mt-3" id="dismissHints">
+    Got it
+  </button>
+
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 
 <!-- FULLSCREEN MAP -->
-<div id="map" style="height: calc(100vh - 120px); width: 100%;" class="border rounded">
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <p class="text-muted m-0">Loading map...</p>
-  </div>
-</div>
-
-<script src="/js/filters.js"></script>
+<div id="map"></div>

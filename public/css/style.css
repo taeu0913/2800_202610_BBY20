@@ -43,3 +43,7 @@
     border-radius: 10px;
     background-color: #d1d5db;
 }
+#map { 
+    height: 100vh;
+    width: 100%;
+}
