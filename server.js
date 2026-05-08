@@ -58,6 +58,14 @@ app.get("/main", (req, res) => {
   res.render('pages/main', { layout: 'templates/skeleton'} );
 });
 
+app.get("/logIn", (req, res) => {
+  res.render('pages/logIn', { layout: 'templates/auth-layout'} );
+});
+
+app.get("/signUp", (req, res) => {
+  res.render('pages/signUp', { layout: 'templates/auth-layout'} );
+});
+
 app.use((req, res) => {
   res.status(404);
   res.render('pages/404', { layout: 'templates/auth-layout' });
