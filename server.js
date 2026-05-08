@@ -133,7 +133,7 @@ app.post("/loggingIn", async (req, res) => {
 
 app.use((req, res) => {
   res.status(404);
-  res.render('pages/404');
+  res.render('pages/404', { layout: 'templates/auth-layout' });
 });
 
 app.listen(PORT, () => {
