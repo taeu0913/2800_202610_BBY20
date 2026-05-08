@@ -1,0 +1,31 @@
+
+ <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+  </script>
+
+ <!-- FIRST-TIME USER CALLOUT -->
+<div id="welcomeCallout" class="alert alert-info alert-dismissible fade show shadow-sm m-3" role="alert">
+  <h4 class="alert-heading">Welcome to ShadeFinder!</h4>
+
+  <p>
+    Use the map to discover shaded areas nearby during hot days.
+    Click the map, explore shaded spots, or use your location to get started.
+  </p>
+
+  <hr>
+
+  <p class="mb-0">
+    You can also optionally contribute anonymous data to help planners design cooler urban spaces.
+  </p>
+
+  <button type="button" class="btn btn-dark mt-3" id="dismissHints">
+    Got it
+  </button>
+
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<!-- FULLSCREEN MAP -->
+<div id="map"></div>
