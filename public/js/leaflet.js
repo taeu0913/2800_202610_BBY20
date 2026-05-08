@@ -1,39 +1,25 @@
-var map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([49.2827, -123.1207], 13);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '© OpenStreetMap'
 }).addTo(map);
 
-//making markers, polygons and circles for testing
-var marker = L.marker([51.5, -0.09]).addTo(map);
+map.locate({setView: true, maxZoom: 16});
 
-var circle = L.circle([51.508, -0.11], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-}).addTo(map);
+function onLocationFound(e) {
+    var radius = e.accuracy;
 
-var polygon = L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047]
-]).addTo(map);
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
-//making popups for testing
-marker.bindPopup("<b>Current Location</b><br>You are here.").openPopup();
-circle.bindPopup("I am a circle.");
-polygon.bindPopup("I am a polygon.");
-
-//dealing with events for testing
-var popup = L.popup();
-
-function onMapClick(e) {
-    popup
-        .setLatLng(e.latlng)
-        .setContent("You clicked the map at " + e.latlng.toString())
-        .openOn(map);
+    L.circle(e.latlng, radius).addTo(map);
 }
 
-map.on('click', onMapClick);
+map.on('locationfound', onLocationFound);
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+map.on('locationerror', onLocationError);
