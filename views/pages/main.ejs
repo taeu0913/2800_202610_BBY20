@@ -1,11 +1,156 @@
+<!-- Filter Section -->
+<div class="filter-wrapper">
 
- <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin="">
+  <!-- HIGH -->
+  <div class="filter-group">
+
+    <button class="btn btn-dark rounded-pill px-3 btn-sm filter-toggle">
+
+      High
+
+    </button>
+
+    <div class="advanced-menu shadow">
+
+      <div class="filter-option">
+
+        <span>Maximum Shade</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Dense Trees</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- MED -->
+  <div class="filter-group">
+
+    <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
+
+      Med
+
+    </button>
+
+    <div class="advanced-menu shadow">
+
+      <div class="filter-option">
+
+        <span>Balanced Shade</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Mixed Routes</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOW -->
+  <div class="filter-group">
+
+    <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
+
+      Low
+
+    </button>
+
+    <div class="advanced-menu shadow">
+
+      <div class="filter-option">
+
+        <span>Shortest Route</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Open Areas</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADVANCED -->
+  <div class="filter-group">
+
+    <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
+
+      <i class="bi bi-sliders"></i>
+
+    </button>
+
+    <div class="advanced-menu shadow">
+
+      <div class="filter-option">
+
+        <span>Outdoor</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Parks</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Cooler</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+      <div class="filter-option">
+
+        <span>Walking</span>
+
+        <div class="option-line"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
   </script>
 
- <!-- FIRST-TIME USER CALLOUT -->
+<!-- FIRST-TIME USER CALLOUT -->
 <div id="welcomeCallout" class="alert alert-info alert-dismissible fade show shadow-sm m-3" role="alert">
   <h4 class="alert-heading">Welcome to ShadeFinder!</h4>
 
@@ -29,3 +174,5 @@
 
 <!-- FULLSCREEN MAP -->
 <div id="map"></div>
+
+<script src="/js/filters.js"></script>
