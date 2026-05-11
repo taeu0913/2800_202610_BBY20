@@ -15,7 +15,7 @@ const PORT = 3000;
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 var mongoStore = Mongo.create({
-  mongoUrl: `mongodb://john:12345@bby20.p8y50me.mongodb.net/authentications`,
+  mongoUrl: `mongodb+srv://john:12345@bby20.p8y50me.mongodb.net/authentications`,
   // crypto: {
   // 	secret: mongodb_session_secret,
   // }
