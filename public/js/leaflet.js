@@ -5,6 +5,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
 }).addTo(map);
 
+// Search bar
+L.Control.geocoder().addTo(map);
+
 map.locate({setView: true, maxZoom: 16});
 
 function onLocationFound(e) {
