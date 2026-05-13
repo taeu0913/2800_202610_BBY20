@@ -3,31 +3,59 @@ const express = require("express");
 const session = require("express-session");
 const expressLayouts = require("express-ejs-layouts");
 const { MongoClient } = require("mongodb");
-const Mongo = require("connect-mongo").default;
+const MongoStore = require("connect-mongo").default;
 const path = require("path");
-const client = require("./dbConnect.js");
+// const client = require("./dbConnect.js");
 const dns = require('node:dns');
 
 // const { connectDB } = require("./config/db");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour
+
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-var mongoStore = Mongo.create({
-  mongoUrl: `mongodb+srv://john:12345@bby20.p8y50me.mongodb.net/authentications`,
-  // crypto: {
-  // 	secret: mongodb_session_secret,
-  // }
+/* secret information section */
+const mongodb_host = process.env.MONGODB_HOST;
+const mongodb_user = process.env.MONGODB_USER;
+const mongodb_password = process.env.MONGODB_PASSWORD;
+const mongodb_user_database = process.env.MONGODB_USER_DATABASE;
+const mongodb_session_database = process.env.MONGODB_SESSION_DATABASE;
+const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
+
+const node_session_secret = process.env.NODE_SESSION_SECRET;
+/* END secret section */
+
+const client = require('./dbConnect');
+const usersCol = client.db(mongodb_user_database).collection('users');
+// const shadeSpotsCol = client.db(mongodb_user_database).collection('shadeSpots');
+
+// var mongoStore = Mongo.create({
+//   mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_session_database}`,
+//   // crypto: {
+//   // 	secret: mongodb_session_secret,
+//   // }
+// });
+
+const mongoStore = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    dbName: mongodb_session_database,
+    crypto: {
+        secret: mongodb_session_secret
+    }
 });
 
 // TODO: Put secrets in .env next sprint
 // TODO: implement crypto for store next sprint
-app.use(session({
-  secret: "9899e993-96a0-4fc9-811a-c884e08efdfd",
-  resave: false,
-  saveUninitialized: true,
-  store: mongoStore
+app.use(session({ 
+    secret: node_session_secret,
+	store: mongoStore, //default is memory store 
+	saveUninitialized: false, 
+	resave: false,
+    cookie: {
+        maxAge: expireTime
+    }
 }));
 
 app.set('view engine', 'ejs');
@@ -47,8 +75,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
-const usersCol = client.db("authentications").collection('users');
 
 let db;
 
