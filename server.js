@@ -222,6 +222,16 @@ app.post("/api/shadespots", async (req, res) => {
     });
 });
 
+app.get("/profile", (req, res) => {
+  const user = req.session.user || { name: "Guest", email: "guest@example.com" };
+  res.render('pages/profile', { layout: 'templates/skeleton', user });
+});
+
+app.delete("/delete-account", (req, res) => {
+  req.session.destroy();
+  res.json({ success: true });
+});
+
 app.get("/api/suggestions", async (req, res) => {
 
     const suggestions = await suggestionsCol.find({}).toArray();
