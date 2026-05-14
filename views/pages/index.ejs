@@ -3,36 +3,41 @@
     Welcome to ShadeFinder! Start by clicking Login or Signup.
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
   </div>
-<% } %>
+  <% } %>
 
-<div class="text-center border-bottom py-5">
+    <div class="text-center border-bottom py-5">
 
-  <h1 class="display-4 fw-bold">ShadeFinder</h1>
+      <h1 class="display-4 fw-bold">ShadeFinder</h1>
 
-  <p class="lead mt-3">
-    Stay cool, explore shaded spaces, and navigate hot days with confidence.
-  </p>
+      <p class="lead mt-3">
+        Stay cool, explore shaded spaces, and navigate hot days with confidence.
+      </p>
 
-  <div class="mt-4">
-    <a href="/login">
-      <button class="btn btn-primary btn-lg me-2"
-      data-bs-toggle="tooltip" title="Login to your account">
-      Login
-      </button>
-    </a>
+      <% if (!req.session.authenticated) { %>
+        <div class="mt-4">
+          <form method="get" action="/login">
+            <input class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" title="Log in to your account"
+              type="submit" value="Log In">
+          </form>
+        </div>
+        <div class="mt-4">
+          <form method="get" action="/signup">
+            <input class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" title="Create a new account"
+              type="submit" value="Sign Up">
+          </form>
+        </div>
+      <% } else { %>
+        <div class="mt-4">
+          <form method="get" action="/main">
+            <input class="btn btn-outline-primary btn-lg" data-bs-toggle="tooltip" title="Jump right in!"
+              type="submit" value="Go to Map">
+          </form>
+        </div>
+      <% } %>
 
-    <a href="/signup">
-      <button class="btn btn-outline-secondary btn-lg"
-      data-bs-toggle="tooltip" title="Create a new account">
-      Signup
-      </button>
-    </a>
-  </div>
 
-  <div class="mt-5">
-    <img src="/images/landing.jpg"
-      class="img-fluid rounded shadow"
-      alt="ShadeFinder preview">
-  </div>
+    <div class="mt-5">
+      <img src="/images/landing.jpg" class="img-fluid rounded shadow" alt="ShadeFinder preview">
+    </div>
 
-</div>
+    </div>
