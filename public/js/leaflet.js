@@ -4,6 +4,8 @@ let userLatLng;
 
 let pendingLatLng = null;
 
+const MAX_RADIUS_METERS = 2000;
+
 const shadeModal = new bootstrap.Modal(document.getElementById("shadeModal"));
 
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -118,6 +120,8 @@ function onLocationFound(e) {
     .openPopup();
 
   L.circle(e.latlng, radius).addTo(map);
+
+  loadSpots();
 }
 
 map.on("locationfound", onLocationFound);
@@ -130,6 +134,16 @@ map.on("locationerror", onLocationError);
 
 // FUNCTION TO CREATE SHADE MARKERS
 function createShadeMarker(spot) {
+  if (!userLatLng) return;
+
+  const spotLatLng = L.latLng(spot.lat, spot.lng);
+  const distance = map.distance(userLatLng, spotLatLng);
+
+  // 3km filter
+  if (distance > MAX_RADIUS_METERS) {
+    return;
+  }
+
   let selectedIcon;
   let targetLayer;
 
@@ -175,6 +189,7 @@ function createShadeMarker(spot) {
 }
 
 // LOAD SHADE SPOTS
+function loadSpots() {
 fetch("/api/shadespots")
   .then((res) => res.json())
   .then((spots) => {
@@ -191,6 +206,7 @@ map.on("click", function (e) {
   pendingLatLng = e.latlng;
   shadeModal.show();
 });
+};
 
 document
   .getElementById("saveShadeBtn")
