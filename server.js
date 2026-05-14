@@ -29,7 +29,7 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 
 const client = require('./dbConnect');
 const usersCol = client.db(mongodb_user_database).collection('users');
-// const shadeSpotsCol = client.db(mongodb_user_database).collection('shadeSpots');
+const shadeSpotsCol = client.db(mongodb_user_database).collection('shadeSpots');
 
 // var mongoStore = Mongo.create({
 //   mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_session_database}`,
@@ -157,6 +157,33 @@ app.post("/loggingIn", async (req, res) => {
         `)
 		return;
 	}
+});
+
+app.get("/api/shadespots", async (req, res) => {
+
+    const spots = await shadeSpotsCol.find({}).toArray();
+
+    res.json(spots);
+});
+
+app.post("/api/shadespots", async (req, res) => {
+
+    const { name, type, lat, lng, description, bestShadedAt } = req.body;
+
+    await shadeSpotsCol.insertOne({
+        name,
+        type,
+        lat,
+        lng,
+        description,
+        bestShadedAt,
+        createdBy: req.session.username || "anonymous",
+        createdAt: new Date()
+    });
+
+    res.json({
+        success: true
+    });
 });
 
 app.use((req, res) => {
