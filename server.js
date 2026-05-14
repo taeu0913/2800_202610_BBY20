@@ -30,8 +30,15 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 /* END secret section */
 
 const client = require('./dbConnect');
+
+// users collection
 const usersCol = client.db(mongodb_user_database).collection('users');
+
+// shadespots collection
 const shadeSpotsCol = client.db(mongodb_user_database).collection('shadeSpots');
+
+// suggestions collection
+const suggestionsCol = client.db(mongodb_user_database).collection('suggestions');
 
 // var mongoStore = Mongo.create({
 //   mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_session_database}`,
@@ -206,6 +213,31 @@ app.post("/api/shadespots", async (req, res) => {
         lng,
         description,
         bestShadedAt,
+        createdBy: req.session.username || "anonymous",
+        createdAt: new Date()
+    });
+
+    res.json({
+        success: true
+    });
+});
+
+app.get("/api/suggestions", async (req, res) => {
+
+    const suggestions = await suggestionsCol.find({}).toArray();
+
+    res.json(suggestions);
+});
+
+app.post("/api/suggestions", async (req, res) => {
+
+    const { category, description, lat, lng } = req.body;
+
+    await suggestionsCol.insertOne({
+        category,
+        description,
+        lat,
+        lng,
         createdBy: req.session.username || "anonymous",
         createdAt: new Date()
     });
