@@ -1,3 +1,24 @@
+/* Color theme */
+:root {
+  /* Your custom theme */
+  --primary-color: #A3B18A;
+  --secondary-color: #588157;
+  --accent-color: #DAD7CD;
+  --text-color: #4f1802;
+
+  /* Map into Bootstrap system */
+  --bs-primary: var(--accent-color);
+  --bs-secondary: var(--secondary-color);
+  --bs-body-bg: var(--primary-color);
+  --bs-body-color: var(--text-color);
+}
+/* End of color theme */
+
+/* navbar color */
+.custom-navbar {
+  background-color: var(--secondary-color);
+}
+
 .filter-wrapper {
     width: 100%;
     display: flex;
@@ -53,14 +74,15 @@
     position: relative;
 }
 
+/* 404 page color */
 .error {
-    color: #1f6f78;
+    color: var(--secondary-color);
 }
 
 .btn-shade {
-  background-color: #1f6f78;
-  border-color: #1f6f78;
-  color: white;
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 .btn-shade:hover {
