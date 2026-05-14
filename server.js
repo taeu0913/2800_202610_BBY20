@@ -7,6 +7,8 @@ const MongoStore = require("connect-mongo").default;
 const path = require("path");
 // const client = require("./dbConnect.js");
 const dns = require('node:dns');
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 
 // const { connectDB } = require("./config/db");
 
@@ -94,32 +96,53 @@ let db;
 
 // startServer();
 
+// Functions
+
+function valSesh(req,res,next) {
+    if (req.session.authenticated) {
+        next();
+    } else {
+        res.redirect('/logIn');
+    }
+}
+
 // Web Application Routes
 app.get("/", (req, res) => {
-  res.render('pages/index', { layout: 'templates/auth-layout' });
+  res.render('pages/index', {
+  layout: 'templates/auth-layout', 
+  req: req,
+  res: res});
 });
 
-app.get("/main", (req, res) => {
-  res.render('pages/main', { layout: 'templates/skeleton' });
+app.get("/main", valSesh, (req, res) => {
+
+  res.render('pages/main', { 
+  layout: 'templates/skeleton',
+  req: req,
+  res: res });
 });
 
 app.get("/logIn", (req, res) => {
-  res.render('pages/logIn', { layout: 'templates/auth-layout' });
+  res.render('pages/logIn', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.get("/signUp", (req, res) => {
-  res.render('pages/signUp', { layout: 'templates/auth-layout' });
+  res.render('pages/signUp', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.post("/signingUp", async (req, res) => {
 
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+  var { username, email, password } = req.body;
 
-  // Processes the creation of a new user
-  // TODO: Hash passwords once encryption is implemented next sprint.	
-  await usersCol.insertOne({ username: username, email: email, password: password });
+  var hashedPassword = await bcrypt.hash(password, saltRounds);
+  
+  await usersCol.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
   req.session.authenticated = true;
   req.session.username = username;
 
@@ -134,7 +157,7 @@ app.post("/loggingIn", async (req, res) => {
 
 	const result = await usersCol.find({email: email}).project({username: 1, email: 1, password: 1, _id: 1}).toArray();
 
-	console.log(result);
+	// console.log(result); 
 	if (result.length != 1) {
         res.send(`
         <p>Email is wrong!<p>   
@@ -142,7 +165,7 @@ app.post("/loggingIn", async (req, res) => {
         `)
 		return;
 	}
-	if (password === result[0].password) {
+	if (await bcrypt.compare(password, result[0].password)) {
 		req.session.authenticated = true;
 		req.session.username = result[0].username;
     console.log("correct password");
@@ -159,9 +182,18 @@ app.post("/loggingIn", async (req, res) => {
 	}
 });
 
+app.post("/loggingOut", async (req, res) => {
+  req.session.authenticated = false;
+	req.session.destroy();
+  res.redirect('/');
+});
+
 app.use((req, res) => {
   res.status(404);
-  res.render('pages/404', { layout: 'templates/auth-layout' });
+  res.render('pages/404', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.listen(PORT, () => {
