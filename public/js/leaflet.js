@@ -8,6 +8,8 @@ const MAX_RADIUS_METERS = 2000;
 
 const shadeModal = new bootstrap.Modal(document.getElementById("shadeModal"));
 
+const suggestionModal = new bootstrap.Modal(document.getElementById("suggestionModal"));
+
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution: "© OpenStreetMap",
@@ -201,10 +203,69 @@ fetch("/api/shadespots")
     console.log("Error loading spots:", err);
   });
 
-// ADD NEW SHADE SPOTS
+// // ADD NEW SHADE SPOTS
+// map.on("click", function (e) {
+//   pendingLatLng = e.latlng;
+//   shadeModal.show();
+// });
+
+// MAP CLICK POPUP OPTIONS
 map.on("click", function (e) {
+
   pendingLatLng = e.latlng;
-  shadeModal.show();
+
+  L.popup()
+    .setLatLng(e.latlng)
+
+    .setContent(`
+      <div class="d-flex flex-column gap-2">
+
+        <button
+          id="popupAddShade"
+          class="btn btn-success btn-sm">
+
+          Add Shade Spot
+
+        </button>
+
+        <button
+          id="popupSuggestShade"
+          class="btn btn-warning btn-sm">
+
+          Suggest Shade Improvement
+
+        </button>
+
+      </div>
+    `)
+
+    .openOn(map);
+});
+
+// popup button listeners
+map.on("popupopen", function () {
+
+  const addBtn = document.getElementById("popupAddShade");
+
+  const suggestBtn = document.getElementById("popupSuggestShade");
+
+  if (addBtn) {
+    addBtn.addEventListener("click", function () {
+
+      map.closePopup();
+
+      shadeModal.show();
+    });
+  }
+
+  if (suggestBtn) {
+    suggestBtn.addEventListener("click", function () {
+
+      map.closePopup();
+
+      suggestionModal.show();
+    });
+  }
 });
 };
 
@@ -241,6 +302,55 @@ document
       document.getElementById("shadeTime").value = "";
       document.getElementById("shadeDesc").value = "";
     } catch (err) {
+      console.log(err);
+    }
+  });
+
+// SAVE SHADE SUGGESTIONS
+document
+  .getElementById("saveSuggestionBtn")
+  .addEventListener("click", async function () {
+
+    const suggestion = {
+
+      category: document.getElementById("suggestCategory").value,
+
+      description: document.getElementById("suggestDesc").value,
+
+      lat: pendingLatLng.lat,
+
+      lng: pendingLatLng.lng,
+    };
+
+    try {
+
+      const response = await fetch("/api/suggestions", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(suggestion),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+
+        alert("Suggestion submitted!");
+      }
+
+      suggestionModal.hide();
+
+      // clear form
+      document.getElementById("suggestCategory").value = "";
+
+      document.getElementById("suggestDesc").value = "";
+
+    } catch (err) {
+
       console.log(err);
     }
   });

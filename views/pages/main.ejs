@@ -214,6 +214,83 @@
   </div>
 </div>
 
+<!-- Suggest Shade Improvement Modal -->
+<div class="modal fade" id="suggestionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Suggest Shade Improvement</h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <select
+          id="suggestCategory"
+          class="form-control mb-2">
+
+          <option value="">Select Issue</option>
+
+          <option value="No tree coverage">
+            No tree coverage
+          </option>
+
+          <option value="Bus stop lacks shelter">
+            Bus stop lacks shelter
+          </option>
+
+          <option value="Playground too hot">
+            Playground too hot
+          </option>
+
+          <option value="Walking path exposed">
+            Walking path exposed
+          </option>
+
+          <option value="Park seating exposed">
+            Park seating exposed
+          </option>
+
+          <option value="Heat island area">
+            Heat island area
+          </option>
+
+        </select>
+
+        <textarea
+          id="suggestDesc"
+          class="form-control"
+          placeholder="Describe the issue">
+        </textarea>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          id="saveSuggestionBtn"
+          class="btn btn-danger">
+          Submit Suggestion
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script src="/js/filters.js"></script>
 <script src="/js/main.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
