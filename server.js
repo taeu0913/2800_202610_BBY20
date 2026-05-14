@@ -7,6 +7,8 @@ const MongoStore = require("connect-mongo").default;
 const path = require("path");
 // const client = require("./dbConnect.js");
 const dns = require('node:dns');
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 
 // const { connectDB } = require("./config/db");
 
@@ -113,13 +115,11 @@ app.get("/signUp", (req, res) => {
 
 app.post("/signingUp", async (req, res) => {
 
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+  var { username, email, password } = req.body;
 
-  // Processes the creation of a new user
-  // TODO: Hash passwords once encryption is implemented next sprint.	
-  await usersCol.insertOne({ username: username, email: email, password: password });
+  var hashedPassword = await bcrypt.hash(password, saltRounds);
+  
+  await usersCol.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
   req.session.authenticated = true;
   req.session.username = username;
 
@@ -134,7 +134,7 @@ app.post("/loggingIn", async (req, res) => {
 
 	const result = await usersCol.find({email: email}).project({username: 1, email: 1, password: 1, _id: 1}).toArray();
 
-	console.log(result);
+	// console.log(result); 
 	if (result.length != 1) {
         res.send(`
         <p>Email is wrong!<p>   
@@ -142,7 +142,7 @@ app.post("/loggingIn", async (req, res) => {
         `)
 		return;
 	}
-	if (password === result[0].password) {
+	if (await bcrypt.compare(password, result[0].password)) {
 		req.session.authenticated = true;
 		req.session.username = result[0].username;
     console.log("correct password");
