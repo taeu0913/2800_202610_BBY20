@@ -50,6 +50,7 @@
 #map { 
     height: 100vh;
     width: 100%;
+    position: relative;
 }
 
 .error {
@@ -65,5 +66,43 @@
 .btn-shade:hover {
   background-color: #185962;
   border-color: #185962;
+  color: white;
+}
+
+/* welcome callout */
+#welcomeCallout {
+  position: absolute;
+  top: 50px;
+  left: 40px;
+  z-index: 1000; /* makes it above the map */
+  width: 320px;
+}
+
+/* Filter bar */
+.filter-bar {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: white;
+  padding: 8px;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.filter-pill {
+  border: none;
+  background: #f1f1f1;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-pill.active {
+  background: #198754; /* bootstrap success green */
   color: white;
 }
