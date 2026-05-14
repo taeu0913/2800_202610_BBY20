@@ -215,6 +215,16 @@ app.post("/api/shadespots", async (req, res) => {
     });
 });
 
+app.get("/profile", (req, res) => {
+  const user = req.session.user || { name: "Guest", email: "guest@example.com" };
+  res.render('pages/profile', { layout: 'templates/skeleton', user });
+});
+
+app.delete("/delete-account", (req, res) => {
+  req.session.destroy();
+  res.json({ success: true });
+});
+
 app.use((req, res) => {
   res.status(404);
   res.render('pages/404', { 
