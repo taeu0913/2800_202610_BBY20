@@ -1,7 +1,7 @@
 <!-- Filter Section -->
-<div class="filter-wrapper">
+<!-- <div class="filter-wrapper">
 
-  <!-- HIGH -->
+  
   <div class="filter-group">
 
     <button class="btn btn-dark rounded-pill px-3 btn-sm filter-toggle">
@@ -33,7 +33,7 @@
   </div>
 
 
-  <!-- MED -->
+  
   <div class="filter-group">
 
     <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
@@ -65,7 +65,7 @@
   </div>
 
 
-  <!-- LOW -->
+  
   <div class="filter-group">
 
     <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
@@ -97,7 +97,7 @@
   </div>
 
 
-  <!-- ADVANCED -->
+  
   <div class="filter-group">
 
     <button class="btn btn-secondary rounded-pill px-3 btn-sm filter-toggle">
@@ -144,7 +144,7 @@
 
   </div>
 
-</div>
+</div> -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
@@ -172,8 +172,48 @@
   <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 
+<!-- filter bar -->
+<div class="filter-bar">
+  <button class="filter-pill active" data-type="all">All</button>
+  <button class="filter-pill" data-type="tree">🌳 Trees</button>
+  <button class="filter-pill" data-type="shelter">⛱ Shelter</button>
+  <button class="filter-pill" data-type="park">🏞 Parks</button>
+</div>
+
 <!-- FULLSCREEN MAP -->
 <div id="map"></div>
 
+<!-- Shade Spot Modal -->
+<div class="modal fade" id="shadeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Add Shade Spot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <input id="shadeName" class="form-control mb-2" placeholder="Name">
+
+        <input id="shadeType" class="form-control mb-2" placeholder="Type (tree, park, shelter)">
+
+        <input id="shadeTime" class="form-control mb-2" placeholder="Best shaded at (morning/afternoon/evening/allday)">
+
+        <textarea id="shadeDesc" class="form-control mb-2" placeholder="Description"></textarea>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="saveShadeBtn" class="btn btn-primary">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script src="/js/filters.js"></script>
+<script src="/js/main.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
