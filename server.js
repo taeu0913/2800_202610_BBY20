@@ -96,21 +96,44 @@ let db;
 
 // startServer();
 
+// Functions
+
+function valSesh(req,res,next) {
+    if (req.session.authenticated) {
+        next();
+    } else {
+        res.redirect('/logIn');
+    }
+}
+
 // Web Application Routes
 app.get("/", (req, res) => {
-  res.render('pages/index', { layout: 'templates/auth-layout' });
+  res.render('pages/index', {
+  layout: 'templates/auth-layout', 
+  req: req,
+  res: res});
 });
 
-app.get("/main", (req, res) => {
-  res.render('pages/main', { layout: 'templates/skeleton' });
+app.get("/main", valSesh, (req, res) => {
+
+  res.render('pages/main', { 
+  layout: 'templates/skeleton',
+  req: req,
+  res: res });
 });
 
 app.get("/logIn", (req, res) => {
-  res.render('pages/logIn', { layout: 'templates/auth-layout' });
+  res.render('pages/logIn', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.get("/signUp", (req, res) => {
-  res.render('pages/signUp', { layout: 'templates/auth-layout' });
+  res.render('pages/signUp', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.post("/signingUp", async (req, res) => {
@@ -159,9 +182,18 @@ app.post("/loggingIn", async (req, res) => {
 	}
 });
 
+app.post("/loggingOut", async (req, res) => {
+  req.session.authenticated = false;
+	req.session.destroy();
+  res.redirect('/');
+});
+
 app.use((req, res) => {
   res.status(404);
-  res.render('pages/404', { layout: 'templates/auth-layout' });
+  res.render('pages/404', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.listen(PORT, () => {
