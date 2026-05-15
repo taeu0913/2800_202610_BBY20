@@ -3,32 +3,77 @@ const express = require("express");
 const session = require("express-session");
 const expressLayouts = require("express-ejs-layouts");
 const { MongoClient } = require("mongodb");
-const Mongo = require("connect-mongo").default;
+const MongoStore = require("connect-mongo").default;
 const path = require("path");
-const client = require("./dbConnect.js");
+// const client = require("./dbConnect.js");
 const dns = require('node:dns');
 const askAIRoute = require("./routes/askAI");
+
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 
 // const { connectDB } = require("./config/db");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour
+
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
-var mongoStore = Mongo.create({
-  mongoUrl: `mongodb://john:12345@ac-jbr310b-shard-00-00.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-01.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-02.p8y50me.mongodb.net:27017/authentications?ssl=true&replicaSet=atlas-ptu4al-shard-0&authSource=admin&appName=BBY20`,
-  // crypto: {
-  // 	secret: mongodb_session_secret,
-  // }
+
+// <!--var mongoStore = Mongo.create({
+//   mongoUrl: `mongodb://john:12345@ac-jbr310b-shard-00-00.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-01.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-02.p8y50me.mongodb.net:27017/authentications?ssl=true&replicaSet=atlas-ptu4al-shard-0&authSource=admin&appName=BBY20`,
+//   // crypto: {
+//   // 	secret: mongodb_session_secret,
+//   // }-->
+
+/* secret information section */
+const mongodb_host = process.env.MONGODB_HOST;
+const mongodb_user = process.env.MONGODB_USER;
+const mongodb_password = process.env.MONGODB_PASSWORD;
+const mongodb_user_database = process.env.MONGODB_USER_DATABASE;
+const mongodb_session_database = process.env.MONGODB_SESSION_DATABASE;
+const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
+
+const node_session_secret = process.env.NODE_SESSION_SECRET;
+/* END secret section */
+
+const client = require('./dbConnect');
+
+// users collection
+const usersCol = client.db(mongodb_user_database).collection('users');
+
+// shadespots collection
+const shadeSpotsCol = client.db(mongodb_user_database).collection('shadeSpots');
+
+// suggestions collection
+const suggestionsCol = client.db(mongodb_user_database).collection('suggestions');
+
+// var mongoStore = Mongo.create({
+//   mongoUrl: `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_host}/${mongodb_session_database}`,
+//   // crypto: {
+//   // 	secret: mongodb_session_secret,
+//   // }
+// });
+
+const mongoStore = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    dbName: mongodb_session_database,
+    crypto: {
+        secret: mongodb_session_secret
+    }
 });
 
 // TODO: Put secrets in .env next sprint
 // TODO: implement crypto for store next sprint
-app.use(session({
-  secret: "9899e993-96a0-4fc9-811a-c884e08efdfd",
-  resave: false,
-  saveUninitialized: true,
-  store: mongoStore
+app.use(session({ 
+    secret: node_session_secret,
+	store: mongoStore, //default is memory store 
+	saveUninitialized: false, 
+	resave: false,
+    cookie: {
+        maxAge: expireTime
+    }
 }));
 
 app.set('view engine', 'ejs');
@@ -49,8 +94,6 @@ app.use((req, res, next) => {
   next();
 });
 
-const usersCol = client.db("authentications").collection('users');
-
 let db;
 
 // Start server ONLY after DB is ready
@@ -69,32 +112,53 @@ let db;
 
 // startServer();
 
+// Functions
+
+function valSesh(req,res,next) {
+    if (req.session.authenticated) {
+        next();
+    } else {
+        res.redirect('/logIn');
+    }
+}
+
 // Web Application Routes
 app.get("/", (req, res) => {
-  res.render('pages/index', { layout: 'templates/auth-layout' });
+  res.render('pages/index', {
+  layout: 'templates/auth-layout', 
+  req: req,
+  res: res});
 });
 
-app.get("/main", (req, res) => {
-  res.render('pages/main', { layout: 'templates/skeleton' });
+app.get("/main", valSesh, (req, res) => {
+
+  res.render('pages/main', { 
+  layout: 'templates/skeleton',
+  req: req,
+  res: res });
 });
 
 app.get("/logIn", (req, res) => {
-  res.render('pages/logIn', { layout: 'templates/auth-layout' });
+  res.render('pages/logIn', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.get("/signUp", (req, res) => {
-  res.render('pages/signUp', { layout: 'templates/auth-layout' });
+  res.render('pages/signUp', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.post("/signingUp", async (req, res) => {
 
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+  var { username, email, password } = req.body;
 
-  // Processes the creation of a new user
-  // TODO: Hash passwords once encryption is implemented next sprint.	
-  await usersCol.insertOne({ username: username, email: email, password: password });
+  var hashedPassword = await bcrypt.hash(password, saltRounds);
+  
+  await usersCol.insertOne({ username: username, email: email, password: hashedPassword, user_type: 'user' });
   req.session.authenticated = true;
   req.session.username = username;
 
@@ -109,17 +173,17 @@ app.post("/loggingIn", async (req, res) => {
 
   const result = await usersCol.find({ email: email }).project({ username: 1, email: 1, password: 1, _id: 1 }).toArray();
 
-  console.log(result);
-  if (result.length != 1) {
-    res.send(`
+	// console.log(result); 
+	if (result.length != 1) {
+        res.send(`
         <p>Email is wrong!<p>   
         <a href="/login">Go back</a>    
         `)
-    return;
-  }
-  if (password === result[0].password) {
-    req.session.authenticated = true;
-    req.session.username = result[0].username;
+		return;
+	}
+	if (await bcrypt.compare(password, result[0].password)) {
+		req.session.authenticated = true;
+		req.session.username = result[0].username;
     console.log("correct password");
 
     res.redirect('/main');
@@ -139,10 +203,80 @@ app.get('/planner-dashboard', (req, res) => {
 });
 
 app.use("/api/ask-ai", askAIRoute);
+app.post("/loggingOut", async (req, res) => {
+  req.session.authenticated = false;
+	req.session.destroy();
+  res.redirect('/');
+});
+
+app.get("/profile", (req, res) => {
+  const user = req.session.user || { name: "Guest", email: "guest@example.com" };
+  res.render('pages/profile', { layout: 'templates/skeleton', user });
+});
+
+app.delete("/delete-account", (req, res) => {
+  req.session.destroy();
+  res.json({ success: true });
+});
+
+app.get("/api/shadespots", async (req, res) => {
+
+    const spots = await shadeSpotsCol.find({}).toArray();
+
+    res.json(spots);
+});
+
+app.post("/api/shadespots", async (req, res) => {
+
+    const { name, type, lat, lng, description, bestShadedAt } = req.body;
+
+    await shadeSpotsCol.insertOne({
+        name,
+        type,
+        lat,
+        lng,
+        description,
+        bestShadedAt,
+        createdBy: req.session.username || "anonymous",
+        createdAt: new Date()
+    });
+
+    res.json({
+        success: true
+    });
+});
+
+app.get("/api/suggestions", async (req, res) => {
+
+    const suggestions = await suggestionsCol.find({}).toArray();
+
+    res.json(suggestions);
+});
+
+app.post("/api/suggestions", async (req, res) => {
+
+    const { category, description, lat, lng } = req.body;
+
+    await suggestionsCol.insertOne({
+        category,
+        description,
+        lat,
+        lng,
+        createdBy: req.session.username || "anonymous",
+        createdAt: new Date()
+    });
+
+    res.json({
+        success: true
+    });
+});
 
 app.use((req, res) => {
   res.status(404);
-  res.render('pages/404', { layout: 'templates/auth-layout' });
+  res.render('pages/404', { 
+  layout: 'templates/auth-layout',
+  req: req,
+  res: res });
 });
 
 app.listen(PORT, () => {
