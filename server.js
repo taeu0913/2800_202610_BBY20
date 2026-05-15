@@ -6,6 +6,7 @@ const { MongoClient } = require("mongodb");
 const MongoStore = require("connect-mongo").default;
 const path = require("path");
 // const client = require("./dbConnect.js");
+const askAIRoute = require("./routes/askAI");
 const dns = require("node:dns");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
@@ -18,6 +19,13 @@ const PORT = process.env.PORT || 3000;
 const expireTime = 1 * 60 * 60 * 1000; //expires after 1 hour
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
+
+// <!--var mongoStore = Mongo.create({
+//   mongoUrl: `mongodb://john:12345@ac-jbr310b-shard-00-00.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-01.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-02.p8y50me.mongodb.net:27017/authentications?ssl=true&replicaSet=atlas-ptu4al-shard-0&authSource=admin&appName=BBY20`,
+//   // crypto: {
+//   // 	secret: mongodb_session_secret,
+//   // }-->
 
 /* secret information section */
 const mongodb_host = process.env.MONGODB_HOST;
@@ -221,6 +229,11 @@ app.post("/loggingIn", async (req, res) => {
   }
 });
 
+app.get('/planner-dashboard', (req, res) => {
+  res.render('pages/plannerDashboard');
+});
+
+app.use("/api/ask-ai", askAIRoute);
 app.post("/loggingOut", async (req, res) => {
   req.session.authenticated = false;
   req.session.destroy();

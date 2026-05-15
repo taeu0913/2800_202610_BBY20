@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "connect-mongo": "^6.0.0",
     "dotenv": "^17.4.2",
@@ -9,7 +11,8 @@
     "express-session": "^1.19.0",
     "mongodb": "^7.2.0",
     "multer": "^2.1.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "openai": "^6.37.0"
   },
   "name": "2800_202610_bby20",
   "version": "1.0.0",
