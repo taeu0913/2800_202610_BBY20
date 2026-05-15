@@ -4,6 +4,9 @@ let userLatLng;
 
 let pendingLatLng = null;
 
+// nearby shade 
+const MAX_RADIUS_METERS = 2000;
+
 const shadeModal = new bootstrap.Modal(document.getElementById("shadeModal"));
 
 const suggestionModal = new bootstrap.Modal(document.getElementById("suggestionModal"));
@@ -73,21 +76,21 @@ const userIcon = L.icon({
 
 const treeIcon = L.icon({
   iconUrl: "/images/tree.png",
-  iconSize: [40, 40],
+  iconSize: [30, 30],
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
 });
 
 const parkIcon = L.icon({
   iconUrl: "/images/park.png",
-  iconSize: [40, 40],
+  iconSize: [35, 35],
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
 });
 
 const shelterIcon = L.icon({
   iconUrl: "/images/shelter.png",
-  iconSize: [40, 40],
+  iconSize: [30, 30],
   iconAnchor: [20, 40],
   popupAnchor: [0, -40],
 });
@@ -120,6 +123,8 @@ function onLocationFound(e) {
     .openPopup();
 
   L.circle(e.latlng, radius).addTo(map);
+
+  loadSpots();
 }
 
 map.on("locationfound", onLocationFound);
@@ -132,6 +137,16 @@ map.on("locationerror", onLocationError);
 
 // FUNCTION TO CREATE SHADE MARKERS
 function createShadeMarker(spot) {
+  if (!userLatLng) return;
+
+  const spotLatLng = L.latLng(spot.lat, spot.lng);
+  const distance = map.distance(userLatLng, spotLatLng);
+
+  // 3km filter
+  if (distance > MAX_RADIUS_METERS) {
+    return;
+  }
+
   let selectedIcon;
   let targetLayer;
 
@@ -177,6 +192,7 @@ function createShadeMarker(spot) {
 }
 
 // LOAD SHADE SPOTS
+function loadSpots() {
 fetch("/api/shadespots")
   .then((res) => res.json())
   .then((spots) => {
@@ -187,12 +203,7 @@ fetch("/api/shadespots")
   .catch((err) => {
     console.log("Error loading spots:", err);
   });
-
-// // ADD NEW SHADE SPOTS
-// map.on("click", function (e) {
-//   pendingLatLng = e.latlng;
-//   shadeModal.show();
-// });
+}
 
 // MAP CLICK POPUP OPTIONS
 map.on("click", function (e) {
@@ -252,6 +263,7 @@ map.on("popupopen", function () {
     });
   }
 });
+
 
 document
   .getElementById("saveShadeBtn")
