@@ -1,4 +1,130 @@
+/* Color theme */
+:root {
+  /* Your custom theme */
+  --primary-color: #A3B18A;
+  --secondary-color: #588157;
+  --accent-color: #DAD7CD;
+  --text-color: #4f1802;
+
+  /* Map into Bootstrap system */
+  --bs-primary: var(--accent-color);
+  --bs-secondary: var(--secondary-color);
+  --bs-body-bg: var(--primary-color);
+  --bs-body-color: var(--text-color);
+}
+/* End of color theme */
+
+/* navbar color */
+.custom-navbar {
+  background-color: var(--secondary-color);
+}
+
+.filter-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+
+    margin: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1000;
+}
+
+.filter-group {
+    position: relative;
+    display: inline-block;
+}
+
+.advanced-menu {
+    position: absolute;
+    top: 45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    background-color: #3f3f46;
+    border-radius: 12px;
+    padding: 14px;
+    display: none;
+    z-index: 2000;
+}
+
+.filter-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    color: white;
+    font-size: 13px;
+}
+
+.filter-option:last-child {
+    margin-bottom: 0;
+}
+.option-line {
+    width: 60px;
+    height: 4px;
+    border-radius: 10px;
+    background-color: #d1d5db;
+}
 #map { 
     height: 100vh;
     width: 100%;
+    position: relative;
+}
+
+/* 404 page color */
+.error {
+    color: var(--secondary-color);
+}
+
+.btn-shade {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.btn-shade:hover {
+  background-color: #185962;
+  border-color: #185962;
+  color: white;
+}
+
+/* welcome callout */
+#welcomeCallout {
+  position: absolute;
+  top: 50px;
+  left: 40px;
+  z-index: 1000; /* makes it above the map */
+  width: 320px;
+}
+
+/* Filter bar */
+.filter-bar {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1000;
+  background: white;
+  padding: 8px;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.filter-pill {
+  border: none;
+  background: #f1f1f1;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-pill.active {
+  background: #198754; /* bootstrap success green */
+  color: white;
 }
