@@ -17,7 +17,7 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
 
-    <% if (req.session.authenticated) { %>
+    <% if (locals.session?.authenticated) { %>
       <div class="ms-auto">
         <form method="post" action="/loggingOut">
           <input type="submit" class="btn btn-outline-light border-0" value="Log Out">
