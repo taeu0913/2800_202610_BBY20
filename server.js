@@ -7,6 +7,7 @@ const Mongo = require("connect-mongo").default;
 const path = require("path");
 const client = require("./dbConnect.js");
 const dns = require('node:dns');
+const askAIRoute = require("./routes/askAI");
 
 // const { connectDB } = require("./config/db");
 
@@ -15,7 +16,7 @@ const PORT = 3000;
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 var mongoStore = Mongo.create({
-  mongoUrl: `mongodb+srv://john:12345@bby20.p8y50me.mongodb.net/authentications`,
+  mongoUrl: `mongodb://john:12345@ac-jbr310b-shard-00-00.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-01.p8y50me.mongodb.net:27017,ac-jbr310b-shard-00-02.p8y50me.mongodb.net:27017/authentications?ssl=true&replicaSet=atlas-ptu4al-shard-0&authSource=admin&appName=BBY20`,
   // crypto: {
   // 	secret: mongodb_session_secret,
   // }
@@ -35,7 +36,7 @@ app.use(expressLayouts);
 app.set('layout', 'templates/skeleton');
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
@@ -103,35 +104,41 @@ app.post("/signingUp", async (req, res) => {
 
 // TODO: Move to EJS if possible
 app.post("/loggingIn", async (req, res) => {
-    var email = req.body.email;
-    var password = req.body.password;
+  var email = req.body.email;
+  var password = req.body.password;
 
-	const result = await usersCol.find({email: email}).project({username: 1, email: 1, password: 1, _id: 1}).toArray();
+  const result = await usersCol.find({ email: email }).project({ username: 1, email: 1, password: 1, _id: 1 }).toArray();
 
-	console.log(result);
-	if (result.length != 1) {
-        res.send(`
+  console.log(result);
+  if (result.length != 1) {
+    res.send(`
         <p>Email is wrong!<p>   
         <a href="/login">Go back</a>    
         `)
-		return;
-	}
-	if (password === result[0].password) {
-		req.session.authenticated = true;
-		req.session.username = result[0].username;
+    return;
+  }
+  if (password === result[0].password) {
+    req.session.authenticated = true;
+    req.session.username = result[0].username;
     console.log("correct password");
 
-		res.redirect('/main');
-		return;
-	}
-	else {
-        res.send(`
+    res.redirect('/main');
+    return;
+  }
+  else {
+    res.send(`
         <p>Password is wrong!<p>   
         <a href="/login">Go back</a>    
         `)
-		return;
-	}
+    return;
+  }
 });
+
+app.get('/planner-dashboard', (req, res) => {
+  res.render('pages/plannerDashboard');
+});
+
+app.use("/api/ask-ai", askAIRoute);
 
 app.use((req, res) => {
   res.status(404);

@@ -1,4 +1,21 @@
-<!-- Filter Section -->
+<div class="ai-topbar">
+
+  <div class="ai-search-container">
+
+    <input type="text" id="aiQuestion" placeholder="Ask something..." />
+
+    <button onclick="askAI()">Ask</button>
+
+    <button onclick="clearChat()">Clear</button>
+
+  </div>
+
+</div>
+
+<!-- RESPONSE GOES HERE (UNDER SEARCH BAR) -->
+<div id="aiResponseContainer"></div>
+
++<!-- Filter Section -->
 <div class="filter-wrapper">
 
   <!-- HIGH -->
@@ -176,3 +193,5 @@
 <div id="map"></div>
 
 <script src="/js/filters.js"></script>
+
+<script src="/js/ai.js"></script>

@@ -41,14 +41,16 @@
 .filter-option:last-child {
     margin-bottom: 0;
 }
+
 .option-line {
     width: 60px;
     height: 4px;
     border-radius: 10px;
     background-color: #d1d5db;
 }
-#map { 
-    height: 100vh;
+
+#map {
+    height: 80vh;
     width: 100%;
 }
 
@@ -57,13 +59,78 @@
 }
 
 .btn-shade {
-  background-color: #1f6f78;
-  border-color: #1f6f78;
-  color: white;
+    background-color: #1f6f78;
+    border-color: #1f6f78;
+    color: white;
 }
 
 .btn-shade:hover {
-  background-color: #185962;
-  border-color: #185962;
-  color: white;
+    background-color: #185962;
+    border-color: #185962;
+    color: white;
+}
+
+.ai-topbar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    background: transparent;
+    position: relative;
+    z-index: 1000;
+}
+
+.ai-search-container {
+    width: 90%;
+    max-width: 650px;
+    display: flex;
+    gap: 10px;
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transition: 0.3s ease;
+}
+
+#aiQuestion {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.ai-search-container button {
+    background: #1f6f78;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#aiResponseContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.ai-response-card {
+    width: 90%;
+    max-width: 650px;
+    background: #e5e7eb;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+    animation: slideUp 0.3s ease;
+}
+
+.user-msg {
+    align-self: flex-end;
+    background: #1f6f78;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 12px;
+    max-width: 80%;
 }
