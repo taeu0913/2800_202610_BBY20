@@ -1,3 +1,21 @@
+
+<div class="ai-topbar">
+
+  <div class="ai-search-container">
+
+    <input type="text" id="aiQuestion" placeholder="Ask something..." />
+
+    <button onclick="askAI()">Ask</button>
+
+    <button onclick="clearChat()">Clear</button>
+
+  </div>
+
+</div>
+
+<!-- RESPONSE GOES HERE (UNDER SEARCH BAR) -->
+<div id="aiResponseContainer"></div>
+
 <!-- Filter Section -->
 <!-- <div class="filter-wrapper">
 
@@ -291,6 +309,7 @@
   </div>
 </div>
 
+<script src="/js/ai.js"></script>
 <script src="/js/filters.js"></script>
 <script src="/js/main.js"></script>
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
